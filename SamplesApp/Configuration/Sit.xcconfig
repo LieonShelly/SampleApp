@@ -8,12 +8,12 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-#include "Pods/Target Support Files/Pods-FacePro/Pods-FacePro.release.xcconfig"
+#include "Pods/Target Support Files/Pods-SamplesApp/Pods-SamplesApp.sit.xcconfig"
 
 BASE_URL = Sit_BABSE
 TYPE = Sit
 
-PRODUCTBUNDLEIDENTIFIER = com.pgmig.facepro
-CODESIGNIDENTITY = iPhone Distribution: ChengDu PinGuo Technology Co., Ltd. (YFZ6GPTEHY)
-DEVELOPMENT_TEAM = YFZ6GPTEHY
-PROVISIONINGPROFILESPECIFIER = facepro_appstore
+PRODUCTBUNDLEIDENTIFIER = com.renjun.photo
+CODESIGNIDENTITY = Apple Development: Xiaoyan Yang (Xiaoyan Yang)
+DEVELOPMENT_TEAM = Xiaoyan Yang
+PROVISIONINGPROFILESPECIFIER = dev
