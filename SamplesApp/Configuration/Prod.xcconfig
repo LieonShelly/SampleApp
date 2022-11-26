@@ -1,0 +1,11 @@
+//
+//  Prod.xcconfig
+//  SamplesApp
+//
+//  Created by Renjun Li on 2022/11/26.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+BASE_URL = Prod_BABSE

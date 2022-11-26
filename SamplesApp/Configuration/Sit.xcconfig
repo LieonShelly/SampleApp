@@ -1,0 +1,19 @@
+//
+//  Sit.xcconfig
+//  SamplesApp
+//
+//  Created by Renjun Li on 2022/11/26.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-FacePro/Pods-FacePro.release.xcconfig"
+
+BASE_URL = Sit_BABSE
+TYPE = Sit
+
+PRODUCTBUNDLEIDENTIFIER = com.pgmig.facepro
+CODESIGNIDENTITY = iPhone Distribution: ChengDu PinGuo Technology Co., Ltd. (YFZ6GPTEHY)
+DEVELOPMENT_TEAM = YFZ6GPTEHY
+PROVISIONINGPROFILESPECIFIER = facepro_appstore
