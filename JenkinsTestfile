@@ -1,10 +1,14 @@
 pipeline {
     agent any
     environment {
-        // Setup Ruby to PATH
         RUBY_HOME = "/usr/local/opt/ruby"
         PATH = "$RUBY_HOME/bin:$PATH"
         LANG = "en_US.UTF-8"
+    }
+    parameters {
+        string(name: 'APP_BUILD_FOLDER', defaultValue: './build', description: 'Application build output folder')
+        string(name: 'APP_PACKAGES_FOLDER', defaultValue: './build/packages', description: 'Application packages output folder')
+        string(name: 'APP_TEST_FOLDER', defaultValue: './build/tests', description: 'Application test output folder')
     }
     stages {
         stage('Setup') {
@@ -14,17 +18,10 @@ pipeline {
                 sh 'bundle exec pod install --verbose'
             }
         }
-        stage('Build') {
-            steps {
-                script {
-                    sh 'bundle exec fastlane build_uat'
-                }
-            }
-        }
         stage('Parallel Stage') {
             failFast true
             parallel {
-                stage('Test') {
+                stage('Unit Test') {
                     steps {
                         script {
                             sh 'bundle exec fastlane unit_tests'
@@ -40,6 +37,24 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+    post {
+        success {
+            dir("${params.APP_TEST_FOLDER}") {                                                                            
+                publishHTML target: [
+                    allowMissing         : false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll              : true,
+                    reportDir            : './coverage',
+                    reportFiles          : '**/*.html',
+                    reportName           : 'Test Coverage'
+                ]
+            }
+        }
+
+        cleanup {
+            cleanWs()
         }
     }
 }
