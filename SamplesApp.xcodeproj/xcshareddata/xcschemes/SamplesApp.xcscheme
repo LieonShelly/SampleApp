@@ -20,6 +20,34 @@
                ReferencedContainer = "container:SamplesApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F890F2DF29320C7B00B9F35C"
+               BuildableName = "SamplesAppTests.xctest"
+               BlueprintName = "SamplesAppTests"
+               ReferencedContainer = "container:SamplesApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F890F2E929320C7B00B9F35C"
+               BuildableName = "SamplesAppUITests.xctest"
+               BlueprintName = "SamplesAppUITests"
+               ReferencedContainer = "container:SamplesApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -36,17 +64,6 @@
                BlueprintIdentifier = "F890F2DF29320C7B00B9F35C"
                BuildableName = "SamplesAppTests.xctest"
                BlueprintName = "SamplesAppTests"
-               ReferencedContainer = "container:SamplesApp.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F890F2E929320C7B00B9F35C"
-               BuildableName = "SamplesAppUITests.xctest"
-               BlueprintName = "SamplesAppUITests"
                ReferencedContainer = "container:SamplesApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -94,7 +111,7 @@
       buildConfiguration = "Sit">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Sit"
+      buildConfiguration = "Prod"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

@@ -6,7 +6,7 @@ target 'SamplesApp' do
   use_frameworks!
 
   pod 'Alamofire'
-
+  pod 'SwiftLint', '~> 0.48'
   target 'SamplesAppTests' do
     inherit! :search_paths
     # Pods for testing

@@ -1,0 +1,81 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :uat do
+    build_app(scheme: "SamplesApp",
+              workspace: "SamplesApp.xcworkspace",
+              include_bitcode: false,
+              configuration: "Uat",
+              clean: true,
+              export_method: "ad-hoc",
+              export_options: {
+                provisioningProfiles: { 
+                  "com.renjun.photo" => "adhoc",
+                },
+                signingCertificate: "iPhone Distribution: Xiaoyan Yang (Z7CS86CU9Z)"
+              },
+              output_directory: "./build/packages",
+              output_name: "SamplesApp-uat.ipa")
+  end
+
+  lane :unit_tests do 
+    run_tests(
+      workspace: "SamplesApp.xcworkspace",
+      scheme: "All-Tests",
+      output_directory: "./build/tests",
+      code_coverage: true,
+      clean: true,
+      skip_slack: true
+    )
+    coverage_report()
+  end
+
+  lane :coverage_report do
+    coverage_path = "build/tests/coverage"
+    # sh "rm -rf ../#{coverage_path}/*"
+    xcov(
+      workspace: "SamplesApp.xcworkspace",
+      scheme: "All-Tests",
+      configuration: "Uat",
+      minimum_coverage_percentage: 30.0,
+      output_directory: coverage_path,
+      markdown_report: true,
+      disable_coveralls: true,
+      skip_slack: true
+    )
+  end
+
+  lane :static_code_check do
+    lint_base({:mode => :lint})
+  end
+
+  private_lane :lint_base do |options|
+    swiftlint(
+      mode: options[:mode],
+      strict: true,
+      executable: "./Pods/SwiftLint/swiftlint",
+      config_file: "./.swiftlint.yml",
+      output_file: "./fastlane/swiftlint_report.md",
+      reporter: "markdown",
+      raise_if_swiftlint_error: true,   
+      ignore_exit_status: true
+    )
+  end
+
+end
