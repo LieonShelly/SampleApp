@@ -17,11 +17,28 @@ default_platform(:ios)
 
 platform :ios do
   desc "Description of what the lane does"
-  lane :uat do
+  lane :build_uat do
     build_app(scheme: "SamplesApp",
               workspace: "SamplesApp.xcworkspace",
               include_bitcode: false,
               configuration: "Uat",
+              clean: true,
+              export_method: "app-store",
+              export_options: {
+                provisioningProfiles: { 
+                  "com.renjun.photo" => "photo_appstore",
+                },
+                signingCertificate: "iPhone Distribution: Xiaoyan Yang (Z7CS86CU9Z)"
+              },
+              output_directory: "./build/packages",
+              output_name: "SamplesApp-prod.ipa")
+  end
+
+  lane :build_prod do
+    build_app(scheme: "SamplesApp",
+              workspace: "SamplesApp.xcworkspace",
+              include_bitcode: false,
+              configuration: "Prod",
               clean: true,
               export_method: "ad-hoc",
               export_options: {
@@ -65,6 +82,10 @@ platform :ios do
     lint_base({:mode => :lint})
   end
 
+  lane :static_code_correct do
+    lint_base({:mode => :fix})
+  end
+
   private_lane :lint_base do |options|
     swiftlint(
       mode: options[:mode],
@@ -75,6 +96,29 @@ platform :ios do
       reporter: "markdown",
       raise_if_swiftlint_error: true,   
       ignore_exit_status: true
+    )
+  end
+
+  lane :release_to_test_channel do
+    desc "release_to_test_channel"
+  end
+
+  lane :release_to_testflight do 
+    build_prod
+    api_key = apple_api_key()
+    upload_to_testflight(
+      api_key: api_key,
+      ipa: lane_context[SharedValues::IPA_OUTPUT_PATH]
+      )
+  end
+
+  private_lane :apple_api_key do
+    api_key = app_store_connect_api_key(
+      key_id: ENV['APPLE_API_KEY_ID'],
+      issuer_id: ENV['APPLE_API_ISSUER_ID'],
+      key_filepath: ENV['APPLE_API_KEY_FILEPATH'],
+      duration: 1200,
+      in_house: false
     )
   end
 

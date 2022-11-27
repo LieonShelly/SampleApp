@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('setup') {
+            steps {
+                sh 'pod install --repo-update'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    sh 'fastlane build_uat'
+                }
+            }
+        }
+        stage('Parallel Stage') {
+            failFast true
+            parallel {
+                stage('Test') {
+                    steps {
+                        script {
+                            sh 'fastlane unit_tests'
+                            junit 'build/tests/report.junit'
+                        }
+                    }
+                }
+                stage('Swiftlint') {
+                    steps {
+                        script {
+                            sh 'fastlane static_code_check'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

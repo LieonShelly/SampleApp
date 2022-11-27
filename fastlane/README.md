@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios uat
+### ios build_uat
 
 ```sh
-[bundle exec] fastlane ios uat
+[bundle exec] fastlane ios build_uat
 ```
 
 Description of what the lane does
+
+### ios build_prod
+
+```sh
+[bundle exec] fastlane ios build_prod
+```
+
+
 
 ### ios unit_tests
 
@@ -43,6 +51,30 @@ Description of what the lane does
 
 ```sh
 [bundle exec] fastlane ios static_code_check
+```
+
+
+
+### ios static_code_correct
+
+```sh
+[bundle exec] fastlane ios static_code_correct
+```
+
+
+
+### ios release_to_test_channel
+
+```sh
+[bundle exec] fastlane ios release_to_test_channel
+```
+
+
+
+### ios release_to_testflight
+
+```sh
+[bundle exec] fastlane ios release_to_testflight
 ```
 
 
