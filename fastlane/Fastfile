@@ -109,7 +109,12 @@ platform :ios do
     upload_to_testflight(
       api_key: api_key,
       ipa: lane_context[SharedValues::IPA_OUTPUT_PATH]
-      )
+    )
+  end
+
+  lane :release_to_testflight_mock do 
+    build_prod
+    puts "mock testflight sucess"
   end
 
   private_lane :apple_api_key do

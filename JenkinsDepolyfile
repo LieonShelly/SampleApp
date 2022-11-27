@@ -1,31 +1,64 @@
 pipeline {
     agent any
-
+    environment {
+        RUBY_HOME = "/usr/local/opt/ruby"
+        PATH = "$RUBY_HOME/bin:$PATH"
+        LANG = "en_US.UTF-8"
+    }
+    parameters {
+        string(name: 'APP_BUILD_FOLDER', defaultValue: './build', description: 'Application build output folder')
+        string(name: 'APP_PACKAGES_FOLDER', defaultValue: './build/packages', description: 'Application packages output folder')
+        string(name: 'APP_TEST_FOLDER', defaultValue: './build/tests', description: 'Application test output folder')
+    }
     stages {
-        stage('setup') {
+        stage('Setup') {
             steps {
-                echo 'setup'
+                sh 'gem install bundler'
+                sh 'bundle install'
+                sh 'bundle exec pod install --verbose'
             }
         }
-        stage('build') {
+        stage('Swiftlint') {
             steps {
-                echo 'build'
+                script {
+                    sh 'bundle exec fastlane static_code_check'
+                     }
+                }
+        }
+        stage('Unit Test') {
+            steps {
+                script {
+                    sh 'bundle exec fastlane unit_tests'
+                    junit 'build/tests/report.junit'
+                }
             }
         }
-        stage('run unit test') {
-            steps { a
-                echo 'run unit test'
+
+        stage('Upload TestFlight') {
+            steps {
+                script {
+                    sh 'bundle exec fastlane release_to_testflight_mock'
+                }
             }
         }
-        stage('export ipa') {
-            steps {
-                echo 'export ipa'
+       
+    }
+    post {
+        success {
+            dir("${params.APP_TEST_FOLDER}") {                                                                            
+                publishHTML target: [
+                    allowMissing         : false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll              : true,
+                    reportDir            : './coverage',
+                    reportFiles          : '**/*.html',
+                    reportName           : 'Test Coverage'
+                ]
             }
         }
-        stage('upload to Fir') {
-            steps {
-                echo 'upload to Fir'
-            }
+
+        cleanup {
+            cleanWs()
         }
     }
 }
