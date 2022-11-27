@@ -14,32 +14,32 @@ pipeline {
                 sh 'bundle exec pod install --verbose'
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         script {
-        //             sh 'fastlane build_uat'
-        //         }
-        //     }
-        // }
-        // stage('Parallel Stage') {
-        //     failFast true
-        //     parallel {
-        //         stage('Test') {
-        //             steps {
-        //                 script {
-        //                     sh 'fastlane unit_tests'
-        //                     junit 'build/tests/report.junit'
-        //                 }
-        //             }
-        //         }
-        //         stage('Swiftlint') {
-        //             steps {
-        //                 script {
-        //                     sh 'fastlane static_code_check'
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                script {
+                    sh 'bundle exec fastlane build_uat'
+                }
+            }
+        }
+        stage('Parallel Stage') {
+            failFast true
+            parallel {
+                stage('Test') {
+                    steps {
+                        script {
+                            sh 'bundle exec fastlane unit_tests'
+                            junit 'build/tests/report.junit'
+                        }
+                    }
+                }
+                stage('Swiftlint') {
+                    steps {
+                        script {
+                            sh 'bundle exec fastlane static_code_check'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
