@@ -1,38 +1,45 @@
 pipeline {
     agent any
-
+    environment {
+        // Setup Ruby to PATH
+        RUBY_HOME = "/usr/local/opt/ruby"
+        PATH = "$RUBY_HOME/bin:$PATH"
+        LANG = "en_US.UTF-8"
+    }
     stages {
         stage('Setup') {
             steps {
-                sh 'pod install --verbose'
+                sh 'gem install bundler'
+                sh 'bundle install'
+                sh 'bundle exec pod install --verbose'
             }
         }
-        stage('Build') {
-            steps {
-                script {
-                    sh 'fastlane build_uat'
-                }
-            }
-        }
-        stage('Parallel Stage') {
-            failFast true
-            parallel {
-                stage('Test') {
-                    steps {
-                        script {
-                            sh 'fastlane unit_tests'
-                            junit 'build/tests/report.junit'
-                        }
-                    }
-                }
-                stage('Swiftlint') {
-                    steps {
-                        script {
-                            sh 'fastlane static_code_check'
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             sh 'fastlane build_uat'
+        //         }
+        //     }
+        // }
+        // stage('Parallel Stage') {
+        //     failFast true
+        //     parallel {
+        //         stage('Test') {
+        //             steps {
+        //                 script {
+        //                     sh 'fastlane unit_tests'
+        //                     junit 'build/tests/report.junit'
+        //                 }
+        //             }
+        //         }
+        //         stage('Swiftlint') {
+        //             steps {
+        //                 script {
+        //                     sh 'fastlane static_code_check'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
