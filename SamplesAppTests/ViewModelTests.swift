@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 
 @testable
-import SamplesApp
+import SampleApps
 
 final class ViewModelTests: XCTestCase {
     func testIsTrue() {
