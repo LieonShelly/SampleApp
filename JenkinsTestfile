@@ -9,13 +9,35 @@ pipeline {
         string(name: 'APP_BUILD_FOLDER', defaultValue: './build', description: 'Application build output folder')
         string(name: 'APP_PACKAGES_FOLDER', defaultValue: './build/packages', description: 'Application packages output folder')
         string(name: 'APP_TEST_FOLDER', defaultValue: './build/tests', description: 'Application test output folder')
+        gitParameter(branch: '',
+                     branchFilter: 'origin/(.*)',
+                     defaultValue: 'main',
+                     description: '',
+                     name: 'BRANCH',
+                     quickFilterEnabled: false,
+                     selectedValue: 'NONE',
+                     sortMode: 'NONE',
+                     tagFilter: '*',
+                     type: 'PT_BRANCH')
     }
     stages {
+         stage('Checkout') {
+            steps {
+                echo "Checkout ${params.BRANCH}"
+                checkout([$class: 'GitSCM',
+                          branches: [[name: "${params.BRANCH}"]],
+                          doGenerateSubmoduleConfigurations: false,
+                          extensions: [],
+                          gitTool: 'Default',
+                          submoduleCfg: [],
+                          userRemoteConfigs: [[url: 'git@github.com:LieonShelly/SampleApp.git']]
+                        ])
+            }
+        }
+        
         stage('Setup') {
             steps {
-                sh 'gem install bundler'
-                sh 'bundle install'
-                sh 'bundle exec pod install --verbose'
+               echo "Setup"
             }
         }
         stage('Parallel Stage') {
@@ -24,37 +46,18 @@ pipeline {
                 stage('Unit Test') {
                     steps {
                         script {
-                            sh 'bundle exec fastlane unit_tests'
-                            junit 'build/tests/report.junit'
+                           echo "Unit Test"
                         }
                     }
                 }
                 stage('Swiftlint') {
                     steps {
                         script {
-                            sh 'bundle exec fastlane static_code_check'
+                            echo "Swiftlint"
                         }
                     }
                 }
             }
-        }
-    }
-    post {
-        success {
-            dir("${params.APP_TEST_FOLDER}") {                                                                            
-                publishHTML target: [
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll              : true,
-                    reportDir            : './coverage',
-                    reportFiles          : '**/*.html',
-                    reportName           : 'Test Coverage'
-                ]
-            }
-        }
-
-        cleanup {
-            cleanWs()
         }
     }
 }
