@@ -47,17 +47,17 @@ pipeline {
        
     }
     post {
-        success {
-            dir("${params.APP_TEST_FOLDER}") {                                                                            
-                publishHTML target: [
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll              : true,
-                    reportDir            : './coverage',
-                    reportFiles          : '**/*.html',
-                    reportName           : 'Test Coverage'
-                ]
-            }
-        }
+        // success {
+        //     dir("${params.APP_TEST_FOLDER}") {                                                                            
+        //         publishHTML target: [
+        //             allowMissing         : false,
+        //             alwaysLinkToLastBuild: false,
+        //             keepAll              : true,
+        //             reportDir            : './coverage',
+        //             reportFiles          : '**/*.html',
+        //             reportName           : 'Test Coverage'
+        //         ]
+        //     }
+        // }
     }
 }
