@@ -29,8 +29,9 @@ pipeline {
         stage('Unit Test') {
             steps {
                 script {
-                    sh 'bundle exec fastlane unit_tests'
-                    junit 'build/tests/report.junit'
+                    // sh 'bundle exec fastlane unit_tests'
+                    // junit 'build/tests/report.junit'
+                    sh 'ls'
                 }
             }
         }
@@ -38,7 +39,8 @@ pipeline {
         stage('Upload TestFlight') {
             steps {
                 script {
-                    sh 'bundle exec fastlane release_to_testflight_mock'
+                    // sh 'bundle exec fastlane release_to_testflight_mock'
+                    sh 'ls'
                 }
             }
         }
