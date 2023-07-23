@@ -13,6 +13,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
+                sh 'rm -rf build'
                 sh 'gem install bundler'
                 sh 'bundle install'
                 sh 'bundle exec pod install --verbose'
